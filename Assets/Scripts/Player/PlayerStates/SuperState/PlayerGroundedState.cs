@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerGroundedState : PlayerState
 {
-    protected Vector2 input;
+    protected int Xinput;
     public PlayerGroundedState(Player players, PlayerStateMachine playerStateMachine, PlayerData playerData, string animatorBoolName) : base(players, playerStateMachine, playerData, animatorBoolName)
     {
     }
@@ -27,7 +27,7 @@ public class PlayerGroundedState : PlayerState
     public override void LogicUpdateState()
     {
         base.LogicUpdateState();
-        input = players.InputHandler.MoveInput;
+        Xinput = players.InputHandler.NormInputX;
     }
 
     public override void PhysicsUpdateState()

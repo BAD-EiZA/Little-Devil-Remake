@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public PlayerInputHandler InputHandler { get; private set; }
     public Rigidbody2D rb { get; private set; }
     public Vector2 curVelo { get; private set; }
+    public int FaceDirection { get; private set; }
     [SerializeField]
     private PlayerData playerData;
 
@@ -27,6 +28,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         InputHandler = GetComponent<PlayerInputHandler>();
         PlayerFSM.Init(IdleState);
+        FaceDirection = 1;
     }
     private void Update()
     {
@@ -42,5 +44,17 @@ public class Player : MonoBehaviour
         workspace.Set(velocity, curVelo.y);
         rb.velocity = workspace;
         curVelo = workspace;
+    }
+    public void CheckFlip(int Xinput)
+    {
+        if (Xinput != 0 && Xinput != FaceDirection)
+        {
+            Flip();
+        }
+    }
+    public void Flip()
+    {
+        FaceDirection *= -1;
+        transform.Rotate(0.0f, 180.0f, 0.0f);
     }
 }
