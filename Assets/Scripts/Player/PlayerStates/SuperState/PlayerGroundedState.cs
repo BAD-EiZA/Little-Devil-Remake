@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerGroundedState : PlayerState
 {
     protected int Xinput;
+    private bool JumpInput;
     public PlayerGroundedState(Player players, PlayerStateMachine playerStateMachine, PlayerData playerData, string animatorBoolName) : base(players, playerStateMachine, playerData, animatorBoolName)
     {
     }
@@ -28,6 +29,12 @@ public class PlayerGroundedState : PlayerState
     {
         base.LogicUpdateState();
         Xinput = players.InputHandler.NormInputX;
+        JumpInput = players.InputHandler.JumpInput;
+        if (JumpInput)
+        {
+            players.InputHandler.UseJumpInput();
+            playerStateMachine.ChangeState(players.JumpState);
+        }
     }
 
     public override void PhysicsUpdateState()

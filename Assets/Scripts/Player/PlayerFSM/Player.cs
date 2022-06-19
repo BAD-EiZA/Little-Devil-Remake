@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
     public PlayerStateMachine PlayerFSM { get; private set; }
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
+    public PlayerJumpState JumpState { get; private set; }
+    public PlayerInAirState InAirState { get; private set; }
+    public PlayerLandState LandState { get; private set; }
     public Animator Anim { get; private set; }
     public PlayerInputHandler InputHandler { get; private set; }
     public Rigidbody2D rb { get; private set; }
@@ -21,6 +24,9 @@ public class Player : MonoBehaviour
         PlayerFSM = new PlayerStateMachine();
         IdleState = new PlayerIdleState(this, PlayerFSM, playerData, "Idle");
         MoveState = new PlayerMoveState(this, PlayerFSM, playerData, "Move");
+        JumpState = new PlayerJumpState(this, PlayerFSM, playerData, "InAir");
+        InAirState = new PlayerInAirState(this, PlayerFSM, playerData, "InAir");
+        LandState = new PlayerLandState(this, PlayerFSM, playerData, "Land");
     }
     private void Start()
     {
@@ -42,6 +48,12 @@ public class Player : MonoBehaviour
     public void SetVeloX(float velocity)
     {
         workspace.Set(velocity, curVelo.y);
+        rb.velocity = workspace;
+        curVelo = workspace;
+    }
+    public void SetVeloY(float velocity)
+    {
+        workspace.Set(curVelo.x, velocity);
         rb.velocity = workspace;
         curVelo = workspace;
     }
