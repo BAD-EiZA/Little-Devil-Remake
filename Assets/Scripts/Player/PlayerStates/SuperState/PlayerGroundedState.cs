@@ -6,6 +6,7 @@ public class PlayerGroundedState : PlayerState
 {
     protected int Xinput;
     private bool JumpInput;
+    private bool isGrounds;
     public PlayerGroundedState(Player players, PlayerStateMachine playerStateMachine, PlayerData playerData, string animatorBoolName) : base(players, playerStateMachine, playerData, animatorBoolName)
     {
     }
@@ -13,11 +14,13 @@ public class PlayerGroundedState : PlayerState
     public override void DoCheckState()
     {
         base.DoCheckState();
+        isGrounds = players.CheckTouchGround();
     }
 
     public override void EnterState()
     {
         base.EnterState();
+        players.JumpState.ResetTotalJump();
     }
 
     public override void ExitState()
@@ -30,10 +33,15 @@ public class PlayerGroundedState : PlayerState
         base.LogicUpdateState();
         Xinput = players.InputHandler.NormInputX;
         JumpInput = players.InputHandler.JumpInput;
-        if (JumpInput)
+        if (JumpInput && players.JumpState.CanJump())
         {
             players.InputHandler.UseJumpInput();
             playerStateMachine.ChangeState(players.JumpState);
+        }
+        else if (!isGrounds)
+        {
+            players.InAirState.StartCoyTime();
+            playerStateMachine.ChangeState(players.InAirState);
         }
     }
 

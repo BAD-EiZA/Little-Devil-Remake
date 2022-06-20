@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     public Vector2 curVelo { get; private set; }
     public int FaceDirection { get; private set; }
     [SerializeField]
+    private Transform groundCheck;
+    [SerializeField]
     private PlayerData playerData;
 
     private Vector2 workspace;
@@ -64,6 +66,12 @@ public class Player : MonoBehaviour
             Flip();
         }
     }
+    public bool CheckTouchGround()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, playerData.groundCheckRadius, playerData.isThatGround);
+    }
+    private void AnimTriggers() => PlayerFSM.CurState.AnimTrigger();
+    private void AnimFinishTriggers() => PlayerFSM.CurState.AnimFinishTrigger();
     public void Flip()
     {
         FaceDirection *= -1;
